@@ -4,17 +4,21 @@ bool Player::move(int ch) {
   // eh tudo ao contrario 
   bool isShot = false;
   if (ch == _controls.getUp()) {
-    if (this->getPosition(7)) return; // 128
-    _positions = _positions << 1;
+    if (!this->getPosition(7)) { // 128
+      _positions = _positions << 1;
+    }
   } else if (ch == _controls.getDown()) {
-    if (this->getPosition(0)) return;
-    _positions = _positions >> 1;
+    if (!this->getPosition(0)) {
+      _positions = _positions >> 1;
+    }
   } else if (ch == _controls.getRight()) {
-    if (_column == 0) return;
-    _column -= 1;
+    if (_column != 0) {
+      _column -= 1;
+    }
   } else if (ch == _controls.getLeft()) {
-    if (_column == 7) return;
-    _column += 1;
+    if (_column != 7) {
+      _column += 1;
+    }
   } else if (ch == _controls.getFire()) {
     isShot = true;
   } else {
