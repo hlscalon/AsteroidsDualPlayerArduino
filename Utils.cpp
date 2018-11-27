@@ -1,4 +1,3 @@
-#include <LedControl.h>
 #include "Utils.hpp"
 
 namespace Utils {
@@ -9,9 +8,21 @@ namespace Utils {
     }
   }
 
-  void clearBuffer() {
+  void clearBufferSerial() {
     while (Serial.available()) {
       char l = Serial.read();
+    }
+  }
+
+  void clearBuffer(SoftwareSerial & serial) {
+    while (serial.available()) {
+      char l = serial.read();
+    }
+  }
+
+  void clearBuffer(AltSoftSerial & serial) {
+    while (serial.available()) {
+      char l = serial.read();
     }
   }
 

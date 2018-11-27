@@ -14,6 +14,15 @@ void Game::print(LedControl (&leds)[2]) {
   }
 }
 
+void Game::movePlayer(PlayerNumber player, int byteRec, const Sound & s) {
+  bool isShot = false;
+  Player & p = player == PlayerNumber::P1 ? _p1 : _p2;
+  if (p.getStatus() == PlayerStatus::Alive) {
+    isShot = p.move(byteRec);
+    if (isShot) this->addShot(p, s);
+  }
+}
+
 void Game::movePlayers(int byteRec, const Sound & s) {    
   bool isShot = false;
   if (_p1.getStatus() == PlayerStatus::Alive) {

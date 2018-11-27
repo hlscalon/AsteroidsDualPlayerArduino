@@ -28,7 +28,9 @@ struct Game {
 
   void print(LedControl (&leds)[2]);
 
-  void Game::movePlayers(int byteRec, const Sound & s);
+  void movePlayer(PlayerNumber player, int byteRec, const Sound & s);
+
+  void movePlayers(int byteRec, const Sound & s);
 
   bool detectCollisions();
 
