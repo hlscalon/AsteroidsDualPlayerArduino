@@ -66,6 +66,10 @@ struct Player {
     return _score;
   }
 
+  void resetScore() {
+    _score = 0;
+  }
+
   bool move(int ch);
 
   void print(LedControl & led) const;

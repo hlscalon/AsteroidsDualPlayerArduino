@@ -1,5 +1,4 @@
 #include <LedControl.h>
-#include <SoftwareSerial.h>
 #include <AltSoftSerial.h>
 
 #include "Utils.hpp"
@@ -9,10 +8,7 @@
 #include "Game.hpp"
 #include "Sound.hpp"
 
-AltSoftSerial serialP1; // Rx = 9, Tx = 10
-
-const int serialRxP2 = 2, serialTxP2 = 3;
-SoftwareSerial serialP2(serialRxP2, serialTxP2);
+AltSoftSerial serialP1; // Rx = 8, Tx = 9
 
 const int dataPin1 = 4, csPin1 = 5, clkPin1 = 6;
 const int dataPin2 = 11, csPin2 = 12, clkPin2 = 13;
@@ -26,17 +22,13 @@ Game game(
   Player(PlayerNumber::P2, 7, Controls('8', '5', '4', '6', '0')) // right
 );
 
-const int soundPin = 0;
+const int soundPin = 2;
 Sound sound(soundPin);
 
 unsigned long timeGameRefresh, timeGameRemoveShots;
 void setup() {
-  // esses dois sozinhos funcionam ok
-  // Serial = 9600, Alt = 38400
   Serial.begin(9600);
   serialP1.begin(38400);
-  
-  serialP2.begin(230400);
 
   leds[0].shutdown(0, false); leds[0].setIntensity(0, 2);
   leds[1].shutdown(0, false); leds[1].setIntensity(0, 2);
@@ -59,26 +51,14 @@ void loop() {
   }
 
   int byteRec;
-
-  /*if (Serial.available() > 0) {
-    byteRec = Serial.read(); 
-    Serial.println("Serial");
-    Serial.println(byteRec);
-    game.movePlayers(byteRec, sound);
-    //game.movePlayer(PlayerNumber::P1, byteRec, sound);
-  }*/
-
   if (serialP1.available() > 0) {
     byteRec = serialP1.read();
-    Serial.println("byterec p1");
-    Serial.println(byteRec);
     game.movePlayer(PlayerNumber::P1, byteRec, sound);
   }
 
-  if (serialP2.available() > 0) {
-    byteRec = serialP2.read();
-    Serial.println("byterec p2");
-    Serial.println(byteRec);
+  if (Serial.available() > 0) {
+    byteRec = Serial.read(); 
+    game.movePlayers(byteRec, sound);
     game.movePlayer(PlayerNumber::P2, byteRec, sound);
   }
 
@@ -86,9 +66,10 @@ void loop() {
     Utils::clearScreen(leds[0]); Utils::clearScreen(leds[1]);
     game.printScore(leds);
     sound.playTargetHitted();
+    game.checkStatus();
     game.resetPositions();
-    //Utils::clearBufferSerial();
-    //Utils::clearBuffer(serialP1); Utils::clearBuffer(serialP2);
+    Utils::clearBufferSerial();
+    Utils::clearBuffer(serialP1);
   }
 
 }

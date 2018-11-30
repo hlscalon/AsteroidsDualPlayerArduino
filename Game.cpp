@@ -51,6 +51,10 @@ bool Game::detectCollisions() {
           collisionDetected = true;
         }
       }
+
+      if (p.getScore() == 5 || pOther.getScore() == 5) {
+        _status = GameStatus::Finished;
+      }
     }
   }
 
